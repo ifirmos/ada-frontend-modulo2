@@ -4,7 +4,7 @@ import { TransferComponent } from "./main-panel/pages/transfer/transfer.componen
 import { LoanComponent } from "./main-panel/pages/loan/loan.component";
 import { TransactionsComponent } from "./main-panel/pages/transactions/transactions.component";
 import { CreateTransactionComponent } from "./main-panel/pages/transactions/components/create-transaction/create-transaction.component";
-
+import { NotFoundComponent } from "./main-panel/pages/not-found/not-found.component";
 
 export const routes: Routes = [
     { path: "dashboard", component: DashboardComponent },
@@ -14,4 +14,5 @@ export const routes: Routes = [
     { path: "transacoes/criar", component: CreateTransactionComponent },
     { path: "transacoes/editar/:id", component: CreateTransactionComponent },
     { path: "", redirectTo: "dashboard", pathMatch: "full" },
+    { path: "**", component: NotFoundComponent },
 ]
