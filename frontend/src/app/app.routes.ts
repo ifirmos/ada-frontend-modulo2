@@ -5,6 +5,9 @@ import { LoanComponent } from "./main-panel/pages/loan/loan.component";
 import { TransactionsComponent } from "./main-panel/pages/transactions/transactions.component";
 import { CreateTransactionComponent } from "./main-panel/pages/transactions/components/create-transaction/create-transaction.component";
 import { NotFoundComponent } from "./main-panel/pages/not-found/not-found.component";
+import { ProfileComponent } from "./main-panel/pages/profile/profile.component";
+import { PersonalDataComponent } from "./main-panel/pages/profile/pages/personal-data/personal-data.component";
+import { SecurityDataComponent } from "./main-panel/pages/profile/pages/security-data/security-data.component";
 
 export const routes: Routes = [
     { path: "dashboard", component: DashboardComponent },
@@ -13,6 +16,15 @@ export const routes: Routes = [
     { path: "transacoes", component: TransactionsComponent },
     { path: "transacoes/criar", component: CreateTransactionComponent },
     { path: "transacoes/editar/:id", component: CreateTransactionComponent },
+    {
+        path: "perfil",
+        component: ProfileComponent,
+        children: [
+            { path: "dados", component: PersonalDataComponent },
+            { path: "seguranca", component: SecurityDataComponent },
+            { path: "", redirectTo: "dados", pathMatch: "full" },
+        ]
+    },
     { path: "", redirectTo: "dashboard", pathMatch: "full" },
     { path: "**", component: NotFoundComponent },
 ]
