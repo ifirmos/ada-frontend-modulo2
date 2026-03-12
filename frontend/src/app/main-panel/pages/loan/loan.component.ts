@@ -1,18 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { LoanService } from '../../../core/services/loan.service';
 import { AccountStateService } from '../../../core/services/account-state.service';
 import { take } from 'rxjs/operators';
+import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulator.component';
 
 @Component({
   selector: 'app-loan',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LoanSimulatorComponent],
   templateUrl: './loan.component.html',
   styleUrls: ['./loan.component.css'],
 })
 export class LoanComponent {
+  loanLimit = signal(180000);
   private fb = inject(FormBuilder);
   private loanService = inject(LoanService);
   private accountState = inject(AccountStateService);

@@ -6,9 +6,17 @@
 
   <article class="loan-hero">
     <div class="muted-light">Limite Disponível</div>
-    <div class="hero-value">R$ 50.000,00</div>
+    <div class="hero-value">{{ loanLimit() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
     <small class="muted-light">Taxa de 1.99% ao mês</small>
   </article>
+
+  <button #botaoSimular>Desejo fazer uma simulação</button>
+
+  @defer (on interaction(botaoSimular)) {
+    <app-loan-simulator></app-loan-simulator>
+  } @placeholder {
+    <p>Clique no botão acima para carregar o simulador.</p>
+  }
 
   <form class="card loan-form" [formGroup]="form">
     <div>
