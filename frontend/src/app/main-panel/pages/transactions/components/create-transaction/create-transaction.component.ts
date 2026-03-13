@@ -82,7 +82,7 @@ export class CreateTransactionComponent implements OnInit {
       .getTransactionById(this.id!)
       .pipe(first())
       .subscribe({
-        next: (transaction) => {
+        next: (transaction: Transaction) => {
           this.originalAmount = Number(transaction.amount) || 0;
           this.form.patchValue({
             ...transaction,

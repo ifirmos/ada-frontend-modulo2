@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountStateService } from '../../../../../core/services/account-state.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
+import { TransactionsService } from '../../services/transactions.service';
 
 @Component({
   selector: 'app-list-transactions',
@@ -29,10 +30,14 @@ export class ListTransactionsComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly accountState = inject(AccountStateService);
   private readonly dialog = inject(MatDialog);
+  private transactionsService = inject(TransactionsService);
 
   @Output() editEmitter = new EventEmitter<string>();
 
-  transactions: Transaction[] = [];
+  transactions = toSignal(this.transactionsService.getTransactions(), {
+    initialValue: [] as Transaction[],
+  })
+
   searchTerm = '';
   accountBalance = 0;
   sortState: Sort = { active: 'date', direction: 'desc' };
@@ -40,10 +45,10 @@ export class ListTransactionsComponent implements OnInit {
   get filteredTransactions(): Transaction[] {
     const normalized = this.searchTerm.trim().toLowerCase();
     if (!normalized) {
-      return this.transactions;
+      return this.transactions();
     }
 
-    return this.transactions.filter((item) => {
+    return this.transactions().filter((item) => {
       const date = new Date(item.date).toLocaleDateString('pt-BR');
       return (
         item.description.toLowerCase().includes(normalized) ||
@@ -57,7 +62,7 @@ export class ListTransactionsComponent implements OnInit {
   }
 
   get totalExpense(): number {
-    return this.transactions
+    return this.transactions()
       .filter((item) => item.amount < 0)
       .reduce((sum, item) => sum + Math.abs(item.amount), 0);
   }
@@ -72,12 +77,6 @@ export class ListTransactionsComponent implements OnInit {
       .subscribe((account) => {
         this.accountBalance = account?.balance || 0;
       });
-
-    this.accountState.transactions$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((transactions) => {
-        this.transactions = transactions;
-      });
   }
 
   redirectToCreate(): void {
@@ -89,7 +88,7 @@ export class ListTransactionsComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    const transactionToDelete = this.transactions.find((item) => item.id === id);
+    const transactionToDelete = this.transactions().find((item) => item.id === id);
     if (!transactionToDelete) {
       return;
     }

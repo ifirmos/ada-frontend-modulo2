@@ -3,8 +3,9 @@
     "item": {
       "id": 1,
       "name": "Cliente Especial",
-      "balance": 4838.50
-    }
+      "balance": 4838.5
+    },
+    "balance": 5038.5
   },
   "transactions": [
     {
@@ -153,8 +154,16 @@
       "description": "Conta de Água",
       "amount": -72,
       "type": "expense"
+    },
+    {
+      "id": "0344",
+      "date": "2026-03-10T03:00:00.000Z",
+      "description": "Teste",
+      "amount": 200,
+      "type": "income"
     }
   ],
   "transfers": [],
-  "loans": []
+  "loans": [],
+  "$schema": "./node_modules/json-server/schema.json"
 }
