@@ -1,16 +1,25 @@
-import { Component, DestroyRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { 
+  Component, 
+  DestroyRef, 
+  EventEmitter, 
+  inject, 
+  OnInit, 
+  Output, 
+  signal 
+} from '@angular/core';
 import { first } from 'rxjs';
 import { Transaction } from '../../models/transaction.model';
 import { Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountStateService } from '../../../../../core/services/account-state.service';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
 import { TransactionsService } from '../../services/transactions.service';
+import { CreateTransactionComponent } from '../create-transaction/create-transaction.component';
 
 @Component({
   selector: 'app-list-transactions',
@@ -34,10 +43,7 @@ export class ListTransactionsComponent implements OnInit {
 
   @Output() editEmitter = new EventEmitter<string>();
 
-  transactions = toSignal(this.transactionsService.getTransactions(), {
-    initialValue: [] as Transaction[],
-  })
-
+  transactions = signal<Transaction[]>([]);
   searchTerm = '';
   accountBalance = 0;
   sortState: Sort = { active: 'date', direction: 'desc' };
@@ -72,6 +78,7 @@ export class ListTransactionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadTransactions();
     this.accountState.account$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((account) => {
@@ -79,8 +86,26 @@ export class ListTransactionsComponent implements OnInit {
       });
   }
 
-  redirectToCreate(): void {
-    this.router.navigate(['/transacoes/criar']);
+  loadTransactions(): void {
+    this.transactionsService.getTransactions().subscribe({
+      next: (data) => this.transactions.set(data),
+      error: (err) => console.error(err),
+    });
+  }
+
+  openCreateTransactionDialog(): void {
+    this.dialog
+      .open(CreateTransactionComponent, {
+        width: '420px',
+      })
+      .afterClosed()
+      .pipe(first())
+      .subscribe((result) => {
+        if (result) {
+          this.loadTransactions();
+        }
+      }
+    );
   }
 
   onEdit(id: string): void {
@@ -93,27 +118,20 @@ export class ListTransactionsComponent implements OnInit {
       return;
     }
 
-    const deletedAmount = transactionToDelete?.amount ?? 0;
-
     this.dialog
       .open(ConfirmDeleteDialogComponent, {
         width: '420px',
-        data: { description: transactionToDelete.description },
+        data: {
+          description: transactionToDelete.description,
+          id: transactionToDelete.id,
+        },
       })
       .afterClosed()
       .pipe(first())
       .subscribe((confirmed) => {
-        if (!confirmed) {
-          return;
+        if (confirmed) {
+          this.loadTransactions();
         }
-
-        this.accountState
-          .deleteTransactionWithBalance(id, deletedAmount)
-          .pipe(first())
-          .subscribe({
-            next: () => {},
-            error: () => {},
-          });
       });
   }
 

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
@@ -22,8 +22,16 @@ export class TransactionsService {
     return this.http.get<Transaction>(`${this.apiUrl}/${id}`);
   }
 
-  createTransaction(transaction: Transaction): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}`, transaction);
+  createTransaction(
+    transaction: Omit<Transaction, 'id'>
+  ): Observable<Transaction> {
+
+  const headers = new HttpHeaders({
+    Authorization: 'Bearer token-secreto-banco-123',
+    'Content-Type': 'application/json'
+  });
+    // POST: Precisa de URL, Corpo da requisição e das Opções (Headers)
+    return this.http.post<Transaction>(`${this.apiUrl}`, transaction, { headers });
   }
 
   updateTransaction(transaction: Transaction, id: string): Observable<void> {
@@ -31,6 +39,8 @@ export class TransactionsService {
   }
 
   deleteTransaction(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    // Exemplo para enviar um motivo de cancelamento junto com a requisição de DELETE
+    const params = new HttpParams().set('motivo', 'cancelamento');
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { params });
   }
 }

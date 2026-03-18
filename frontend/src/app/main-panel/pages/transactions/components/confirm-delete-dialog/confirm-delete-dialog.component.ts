@@ -1,9 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { TransactionsService } from '../../services/transactions.service';
 
 interface ConfirmDeleteDialogData {
   description: string;
+  id: string;
 }
 
 @Component({
@@ -17,9 +19,31 @@ interface ConfirmDeleteDialogData {
 })
 export class ConfirmDeleteDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<ConfirmDeleteDialogComponent, boolean>);
+  private readonly transactionsService = inject(TransactionsService);
   readonly data = inject<ConfirmDeleteDialogData>(MAT_DIALOG_DATA);
 
-  close(confirmed: boolean): void {
-    this.dialogRef.close(confirmed);
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
+
+  confirmDelete(): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.transactionsService.deleteTransaction(this.data.id).subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        console.error('Erro ao excluir transação:', err);
+        this.errorMessage.set('Ocorreu um erro ao excluir a transação.');
+      },
+      complete: () => {
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  close(): void {
+    this.dialogRef.close(false);
   }
 }
