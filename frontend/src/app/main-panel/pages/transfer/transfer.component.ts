@@ -31,6 +31,7 @@ export class TransferComponent {
   submit(): void {
     this.error = null;
     this.success = false;
+    this.isTransfering.set(true);
     if (this.form.invalid) return;
 
     const destinationAccount = this.form.get('destinationAccount')!.value as string;
@@ -53,7 +54,6 @@ export class TransferComponent {
         return;
       }
 
-      this.isTransfering.set(false);
       this.accountState.transfer(destinationAccount, amount, description)
         .subscribe({
           next: () => {

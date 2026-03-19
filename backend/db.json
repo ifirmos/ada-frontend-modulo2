@@ -5,7 +5,7 @@
       "name": "Cliente Especial",
       "balance": 4838.5
     },
-    "balance": 4638.5
+    "balance": 4608.5
   },
   "transactions": [
     {
@@ -174,6 +174,27 @@
       "date": "2026-03-19T22:23:40.558Z",
       "description": "Transferência para Conta Corrente 0012 - teste",
       "amount": -200,
+      "type": "expense"
+    },
+    {
+      "id": "1773959406166",
+      "date": "2026-03-19T22:30:06.166Z",
+      "description": "Transferência para Conta Corrente 0012 - aaa",
+      "amount": -300,
+      "type": "expense"
+    },
+    {
+      "id": "1773959434070",
+      "date": "2026-03-19T22:30:34.070Z",
+      "description": "Transferência para Conta Corrente 0012 - teste",
+      "amount": -120,
+      "type": "expense"
+    },
+    {
+      "id": "1773959530999",
+      "date": "2026-03-19T22:32:10.999Z",
+      "description": "Transferência para Conta Corrente 0012 - eee",
+      "amount": -230,
       "type": "expense"
     }
   ],
