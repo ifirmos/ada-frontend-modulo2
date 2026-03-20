@@ -31,18 +31,7 @@ export class TransactionsService {
   updateTransaction(transaction: Transaction, id: string): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, transaction);
   }
-
-/*************  ✨ Windsurf Command ⭐  *************/
-  /**
-   * Delete a transaction by id.
-   * @param {string} id The id of the transaction to be deleted.
-   * @returns {Observable<void>} An observable that completes when the transaction is deleted.
-   * @example
-   * this.transactionsService.deleteTransaction('123').subscribe(() => {
-   *   console.log('Transaction deleted');
-   * });
-   */
-/*******  a5e12ee6-6c2e-4cff-9ad0-a8859d723072  *******/
+  
   deleteTransaction(id: string): Observable<void> {
     // Exemplo para enviar um motivo de cancelamento junto com a requisição de DELETE
     const params = new HttpParams().set('motivo', 'cancelamento');
