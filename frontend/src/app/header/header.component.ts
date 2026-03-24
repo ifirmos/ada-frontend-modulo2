@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AccountStateService } from '../core/services/account-state.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class HeaderComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly accountState = inject(AccountStateService);
+  readonly authService = inject(AuthService);
 
   accountName = 'Cliente';
   isLight = false;
@@ -39,6 +41,10 @@ export class HeaderComponent {
       localStorage.setItem('theme', this.isLight ? 'light' : 'dark');
     } catch (e) {}
     this.applyTheme();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   private applyTheme() {
