@@ -5,7 +5,7 @@
       "name": "Cliente Especial",
       "balance": 4838.5
     },
-    "balance": 4608.5
+    "balance": 4000
   },
   "transactions": [
     {
@@ -149,13 +149,6 @@
       "type": "expense"
     },
     {
-      "id": "u629",
-      "date": "2026-03-30T18:30:00.000Z",
-      "description": "Conta de Água",
-      "amount": -72,
-      "type": "expense"
-    },
-    {
       "id": "0344",
       "date": "2026-03-10T03:00:00.000Z",
       "description": "Teste",
@@ -195,6 +188,27 @@
       "date": "2026-03-19T22:32:10.999Z",
       "description": "Transferência para Conta Corrente 0012 - eee",
       "amount": -230,
+      "type": "expense"
+    },
+    {
+      "id": "keR1aWv6WTs",
+      "date": "2026-03-28T16:03:28.052Z",
+      "description": "Empréstimo - crédito de R$ 12000.00",
+      "amount": 12000,
+      "type": "income"
+    },
+    {
+      "id": "mFtCfVJWUL8",
+      "date": "2026-03-28T16:03:48.531Z",
+      "description": "Empréstimo - crédito de R$ 12000.00",
+      "amount": 12000,
+      "type": "income"
+    },
+    {
+      "id": "p5PqY2doaMs",
+      "date": "2026-03-28T16:05:48.258Z",
+      "description": "Transferência para Conta Corrente 0012 - aaaaa",
+      "amount": -838.5,
       "type": "expense"
     }
   ],

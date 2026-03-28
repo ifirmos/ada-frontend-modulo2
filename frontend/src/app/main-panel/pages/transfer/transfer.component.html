@@ -1,46 +1,50 @@
 <section class="transfer-root">
   <header>
-    <h2>Transferência</h2>
-    <p class="muted">Realize transferências para outras contas</p>
+    <h2>{{ 'TRANSFER.TITLE' | translate }}</h2>
+    <p class="muted">{{ 'TRANSFER.SUBTITLE' | translate }}</p>
   </header>
 
   <article class="balance-card">
-    <div>Saldo Disponível</div>
+    <div>{{ 'TRANSFER.BALANCE' | translate }}</div>
     <div class="balance-value">
-      {{ (account$ | async)?.balance || 0 | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+      {{ (account()?.balance || 0) | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
     </div>
   </article>
 
   <form class="card transfer-form" (ngSubmit)="submit()" [formGroup]="form">
     <div>
-      <label class="form-label">Conta Destino</label>
+      <label class="form-label">{{ 'TRANSFER.DESTINATION' | translate }}</label>
       <select formControlName="destinationAccount">
-        <option value="" disabled>Selecione uma conta</option>
+        <option value="" disabled>{{ 'TRANSFER.SELECT_ACCOUNT' | translate }}</option>
         @for (account of destinationAccounts; track account) {
           <option [value]="account">{{ account }}</option>
         }
       </select>
-      <small class="form-help">Informe a conta destino.</small>
+      <small class="form-help">{{ 'TRANSFER.DESTINATION_HELP' | translate }}</small>
     </div>
 
     <div>
-      <label class="form-label">Valor</label>
+      <label class="form-label">{{ 'TRANSFER.AMOUNT' | translate }}</label>
       <input type="number" formControlName="amount" placeholder="0,00" />
-      <small class="form-help">Informe um valor válido.</small>
+      <small class="form-help">{{ 'TRANSFER.AMOUNT_HELP' | translate }}</small>
     </div>
 
     <div>
-      <label class="form-label">Descrição</label>
-      <input formControlName="description" placeholder="Digite uma descrição (opcional)" />
+      <label class="form-label">{{ 'TRANSFER.DESCRIPTION' | translate }}</label>
+      <input formControlName="description" [placeholder]="'TRANSFER.DESCRIPTION_PLACEHOLDER' | translate" />
     </div>
 
     <button class="submit-btn" type="submit" [disabled]="isTransfering() || form.invalid">
-      {{ isTransfering() ? "Transferindo..." : "Transferir" }}
+      {{ isTransfering() ? ('TRANSFER.TRANSFERRING' | translate) : ('TRANSFER.SUBMIT' | translate) }}
     </button>
 
     <div class="status">
-      <div *ngIf="error" class="error">{{ error }}</div>
-      <div *ngIf="success" class="success">Transferência realizada</div>
+      @if (error()) {
+        <div class="error">{{ error() }}</div>
+      }
+      @if (success()) {
+        <div class="success">{{ 'TRANSFER.SUCCESS' | translate }}</div>
+      }
     </div>
   </form>
 </section>

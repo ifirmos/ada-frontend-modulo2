@@ -26,3 +26,17 @@
     color: var(--white);
     background: var(--icon-hover-bg);
 }
+
+.flag-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.lang-btn {
+    font-size: 1.25rem;
+}
+
+.active-lang {
+    background: var(--icon-hover-bg);
+    font-weight: 600;
+}

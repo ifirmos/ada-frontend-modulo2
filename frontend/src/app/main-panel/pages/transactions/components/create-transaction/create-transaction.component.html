@@ -1,14 +1,14 @@
 <section class="create-transaction-root">
   <header>
-    <h2>{{ id ? 'Editar Transação' : 'Nova Transação' }}</h2>
-    <p class="muted">Preencha os campos para salvar a movimentação</p>
+    <h2>{{ 'CREATE_TRANSACTION.TITLE' | translate }}</h2>
+    <p class="muted">{{ 'CREATE_TRANSACTION.SUBTITLE' | translate }}</p>
   </header>
 
   <form class="card create-form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Data</mat-label>
+      <mat-label>{{ 'CREATE_TRANSACTION.DATE' | translate }}</mat-label>
       <input matInput formControlName="date" [matDatepicker]="picker" />
-      <mat-hint>A data deve ser entre 01/01/2026 e a data de hoje</mat-hint>
+      <mat-hint>{{ 'CREATE_TRANSACTION.DATE_HINT' | translate }}</mat-hint>
       @if (this.form.get("date")?.errors?.["dateOutOfRange"]) {
         <mat-error
           >Data deve estar entre
@@ -28,22 +28,22 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Descrição</mat-label>
+      <mat-label>{{ 'CREATE_TRANSACTION.DESCRIPTION' | translate }}</mat-label>
       <input
         matInput
-        placeholder="Descreva a transação"
+        [placeholder]="'CREATE_TRANSACTION.DESCRIPTION_PLACEHOLDER' | translate"
         formControlName="description"
       />
       @if (form.get("description")?.errors?.["required"]) {
-        <mat-error>A descrição precisa ser informada</mat-error>
+        <mat-error>{{ 'CREATE_TRANSACTION.ERROR_REQUIRED' | translate }}</mat-error>
       }
       @if (form.get("description")?.errors?.["minlength"]) {
-        <mat-error>A descrição precisa ter pelo menos 3 caracteres</mat-error>
+        <mat-error>{{ 'CREATE_TRANSACTION.ERROR_MINLENGTH' | translate }}</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Valor</mat-label>
+      <mat-label>{{ 'CREATE_TRANSACTION.AMOUNT' | translate }}</mat-label>
       <input
         matInput
         placeholder="R$ 0,00"
@@ -57,11 +57,11 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Tipo</mat-label>
+      <mat-label>{{ 'CREATE_TRANSACTION.TYPE' | translate }}</mat-label>
       <mat-select formControlName="type">
-        <mat-option [value]="null" selected>- Selecione</mat-option>
-        <mat-option [value]="transactionTypesEnum.INCOME">Entrada</mat-option>
-        <mat-option [value]="transactionTypesEnum.EXPENSE">Saída</mat-option>
+        <mat-option [value]="null" selected>- {{ 'CREATE_TRANSACTION.SELECT' | translate }}</mat-option>
+        <mat-option [value]="transactionTypesEnum.INCOME">{{ 'TRANSACTIONS.INCOME' | translate }}</mat-option>
+        <mat-option [value]="transactionTypesEnum.EXPENSE">{{ 'TRANSACTIONS.EXPENSE' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -69,17 +69,21 @@
       <button
         type="submit"
         class="action-btn primary"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || isLoading()"
       >
-        Salvar
+        {{ isLoading() ? ('CREATE_TRANSACTION.SAVING' | translate) : ('CREATE_TRANSACTION.SAVE' | translate) }}
       </button>
       <button
         type="button"
         class="action-btn secondary"
         (click)="backToList()"
       >
-        Voltar
+        {{ 'CREATE_TRANSACTION.BACK' | translate }}
       </button>
     </div>
+
+    @if (errorMessage()) {
+      <div class="error">{{ errorMessage() }}</div>
+    }
   </form>
 </section>

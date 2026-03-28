@@ -109,11 +109,6 @@ td {
 	height: 19px;
 }
 
-.table-btn.edit {
-	border-color: var(--primary-45);
-	color: var(--muted-accent-1);
-}
-
 .table-btn.remove {
 	border-color: var(--danger);
 	background: var(--danger-20);

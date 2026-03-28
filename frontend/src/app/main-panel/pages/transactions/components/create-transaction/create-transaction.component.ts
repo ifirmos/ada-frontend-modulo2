@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMaskDirective } from 'ngx-mask'
+import { TranslatePipe } from '@ngx-translate/core';
 import { TransactionTypes } from '../../constants/transaction-types.enum';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
@@ -27,8 +28,10 @@ import { DatePipe } from '@angular/common';
     MatSelectModule,
     NgxMaskDirective,
     DatePipe,
+    TranslatePipe,
   ],
   providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './create-transaction.component.html',
   styleUrl: './create-transaction.component.css',
 })
@@ -36,7 +39,6 @@ export class CreateTransactionComponent {
   private readonly transactionsService = inject(TransactionsService);
   private readonly dialogRef = inject(MatDialogRef<CreateTransactionComponent>);
   readonly data = inject(MAT_DIALOG_DATA, { optional: true });
-  readonly id = this.data?.id;
 
   form = new FormGroup({
     date: new FormControl(new Date().toISOString().split('T')[0], {

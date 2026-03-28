@@ -53,19 +53,6 @@ export class AccountStateService {
     );
   }
 
-  updateTransactionWithBalance(
-    transaction: Transaction,
-    id: string,
-    originalAmount: number,
-  ): Observable<void> {
-    const delta = transaction.amount - originalAmount;
-
-    return this.transactionsService.updateTransaction(transaction, id).pipe(
-      switchMap(() => this.applyBalanceDelta(delta)),
-      switchMap(() => this.refreshTransactions()),
-    );
-  }
-
   deleteTransactionWithBalance(id: string, deletedAmount: number): Observable<void> {
     return this.transactionsService.deleteTransaction(id).pipe(
       switchMap(() => this.applyBalanceDelta(-deletedAmount)),

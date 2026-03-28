@@ -1,15 +1,15 @@
 import { 
+  ChangeDetectionStrategy,
   Component, 
   DestroyRef, 
-  EventEmitter, 
   inject, 
   OnInit, 
-  Output, 
-  signal 
+  signal,
+  computed 
 } from '@angular/core';
 import { first } from 'rxjs';
 import { Transaction } from '../../models/transaction.model';
-import { Router } from '@angular/router';
+
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AccountStateService } from '../../../../../core/services/account-state.service';
@@ -20,6 +20,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
 import { TransactionsService } from '../../services/transactions.service';
 import { CreateTransactionComponent } from '../create-transaction/create-transaction.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-transactions',
@@ -30,26 +31,26 @@ import { CreateTransactionComponent } from '../create-transaction/create-transac
     MatSortModule,
     MatIconModule,
     MatDialogModule,
+    TranslatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './list-transactions.component.html',
   styleUrl: './list-transactions.component.css',
 })
 export class ListTransactionsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly router = inject(Router);
   private readonly accountState = inject(AccountStateService);
   private readonly dialog = inject(MatDialog);
   private transactionsService = inject(TransactionsService);
 
-  @Output() editEmitter = new EventEmitter<string>();
-
   transactions = signal<Transaction[]>([]);
-  searchTerm = '';
-  accountBalance = 0;
-  sortState: Sort = { active: 'date', direction: 'desc' };
+  searchTerm = signal('');
+  accountBalance = signal(0);
+  sortState = signal<Sort>({ active: 'date', direction: 'desc' });
+  isLoading = signal(false);
 
-  get filteredTransactions(): Transaction[] {
-    const normalized = this.searchTerm.trim().toLowerCase();
+  filteredTransactions = computed(() => {
+    const normalized = this.searchTerm().trim().toLowerCase();
     if (!normalized) {
       return this.transactions();
     }
@@ -61,35 +62,34 @@ export class ListTransactionsComponent implements OnInit {
         date.includes(normalized)
       );
     });
-  }
+  });
 
-  get totalIncome(): number {
-    return this.accountBalance;
-  }
+  totalIncome = computed(() => this.accountBalance());
 
-  get totalExpense(): number {
-    return this.transactions()
+  totalExpense = computed(() =>
+    this.transactions()
       .filter((item) => item.amount < 0)
-      .reduce((sum, item) => sum + Math.abs(item.amount), 0);
-  }
+      .reduce((sum, item) => sum + Math.abs(item.amount), 0)
+  );
 
-  get sortedFilteredTransactions(): Transaction[] {
-    return this.sortTransactions(this.filteredTransactions, this.sortState);
-  }
+  sortedFilteredTransactions = computed(() =>
+    this.sortTransactions(this.filteredTransactions(), this.sortState())
+  );
 
   ngOnInit(): void {
     this.loadTransactions();
     this.accountState.account$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((account) => {
-        this.accountBalance = account?.balance || 0;
+        this.accountBalance.set(account?.balance || 0);
       });
   }
 
   loadTransactions(): void {
+    this.isLoading.set(true);
     this.transactionsService.getTransactions().subscribe({
-      next: (data) => this.transactions.set(data),
-      error: (err) => console.error(err),
+      next: (data) => { this.transactions.set(data); this.isLoading.set(false); },
+      error: (err) => { console.error(err); this.isLoading.set(false); },
     });
   }
 
@@ -106,10 +106,6 @@ export class ListTransactionsComponent implements OnInit {
         }
       }
     );
-  }
-
-  onEdit(id: string): void {
-    this.router.navigate([`/transacoes/editar/${id}`]);
   }
 
   onDelete(id: string): void {
@@ -136,7 +132,7 @@ export class ListTransactionsComponent implements OnInit {
   }
 
   onSortChange(sort: Sort): void {
-    this.sortState = sort;
+    this.sortState.set(sort);
   }
 
   private sortTransactions(items: Transaction[], sort: Sort): Transaction[] {

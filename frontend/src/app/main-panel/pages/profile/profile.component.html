@@ -1,8 +1,28 @@
-<h2>Perfil do usuário</h2>
+<section class="profile-root">
+  <header class="profile-header">
+    <div class="avatar-container">
+      <div class="avatar">
+        <span class="avatar-initials">{{ account()?.name?.charAt(0) ?? 'C' }}</span>
+      </div>
+      <div class="user-info">
+        <h2>{{ account()?.name ?? ('COMMON.CLIENT' | translate) }}</h2>
+        <p class="muted">{{ 'PROFILE.MEMBER_SINCE' | translate }} Mar 2024</p>
+      </div>
+    </div>
+  </header>
 
-<nav>
-    <a routerLink="dados" routerLinkActive="active">Dados pessoais</a>
-    <a routerLink="seguranca" routerLinkActive="active">Segurança</a>
-</nav>
+  <nav class="profile-tabs">
+    <a routerLink="dados" routerLinkActive="active">
+      <span class="tab-icon">👤</span>
+      {{ 'PROFILE.PERSONAL_DATA' | translate }}
+    </a>
+    <a routerLink="seguranca" routerLinkActive="active">
+      <span class="tab-icon">🔒</span>
+      {{ 'PROFILE.SECURITY' | translate }}
+    </a>
+  </nav>
 
-<router-outlet></router-outlet>
+  <div class="profile-content">
+    <router-outlet></router-outlet>
+  </div>
+</section>

@@ -1,0 +1,139 @@
+.personal-data-root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h3 {
+  font-size: 1.15rem;
+  margin-bottom: 2px;
+}
+
+.edit-btn {
+  border: 1px solid var(--primary-45);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted-accent-2);
+  padding: 9px 18px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: var(--primary-18);
+}
+
+.edit-btn.cancel {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.edit-btn.cancel:hover {
+  background: var(--danger-20);
+}
+
+.success-banner {
+  background: var(--success-16);
+  color: var(--success-text);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.form-section h4 {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+}
+
+.field {
+  width: 100%;
+}
+
+.field.span-2 {
+  grid-column: span 2;
+}
+
+.field-sm {
+  width: 100%;
+  max-width: 120px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  background: var(--primary);
+  color: var(--white);
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.save-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--field-outline-20);
+  --mdc-outlined-text-field-hover-outline-color: var(--field-outline-30);
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  --mat-sys-on-surface: var(--text);
+  --mat-sys-on-surface-variant: var(--text-muted);
+  --mat-sys-primary: var(--primary);
+}
+
+:host ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+:host ::ng-deep .mat-mdc-form-field-hint,
+:host ::ng-deep .mat-mdc-form-field-error {
+  color: var(--muted-accent-3);
+}
+
+@media (max-width: 600px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.span-2 {
+    grid-column: span 1;
+  }
+
+  .field-sm {
+    max-width: 100%;
+  }
+
+  .form-section {
+    padding: 16px;
+  }
+}

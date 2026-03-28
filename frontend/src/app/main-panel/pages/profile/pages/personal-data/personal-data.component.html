@@ -1,1 +1,121 @@
-<p>personal-data works!</p>
+<section class="personal-data-root">
+  <header class="section-header">
+    <div>
+      <h3>{{ 'PERSONAL_DATA.TITLE' | translate }}</h3>
+      <p class="muted">{{ 'PERSONAL_DATA.SUBTITLE' | translate }}</p>
+    </div>
+    <button
+      type="button"
+      class="edit-btn"
+      [class.cancel]="isEditing()"
+      (click)="toggleEdit()">
+      {{ isEditing() ? ('PERSONAL_DATA.CANCEL' | translate) : ('PERSONAL_DATA.EDIT' | translate) }}
+    </button>
+  </header>
+
+  @if (saveSuccess()) {
+    <div class="success-banner">
+      ✔ {{ 'PERSONAL_DATA.SAVE_SUCCESS' | translate }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="form-section">
+      <h4>{{ 'PERSONAL_DATA.BASIC_INFO' | translate }}</h4>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field span-2">
+          <mat-label>{{ 'PERSONAL_DATA.FULL_NAME' | translate }}</mat-label>
+          <input matInput formControlName="fullName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.CPF' | translate }}</mat-label>
+          <input matInput formControlName="cpf" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.BIRTH_DATE' | translate }}</mat-label>
+          <input matInput type="date" formControlName="birthDate" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.PHONE' | translate }}</mat-label>
+          <input matInput formControlName="phone" mask="(00) 00000-0000" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.EMAIL' | translate }}</mat-label>
+          <input matInput type="email" formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.MOTHER_NAME' | translate }}</mat-label>
+          <input matInput formControlName="motherName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.GENDER' | translate }}</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="male">{{ 'PERSONAL_DATA.GENDER_MALE' | translate }}</mat-option>
+            <mat-option value="female">{{ 'PERSONAL_DATA.GENDER_FEMALE' | translate }}</mat-option>
+            <mat-option value="other">{{ 'PERSONAL_DATA.GENDER_OTHER' | translate }}</mat-option>
+            <mat-option value="prefer-not">{{ 'PERSONAL_DATA.GENDER_PREFER_NOT' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h4>{{ 'PERSONAL_DATA.ADDRESS' | translate }}</h4>
+
+      <div class="field-grid">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.ZIP' | translate }}</mat-label>
+          <input matInput formControlName="zip" mask="00000-000" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field span-2">
+          <mat-label>{{ 'PERSONAL_DATA.STREET' | translate }}</mat-label>
+          <input matInput formControlName="street" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-sm">
+          <mat-label>{{ 'PERSONAL_DATA.NUMBER' | translate }}</mat-label>
+          <input matInput formControlName="number" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.COMPLEMENT' | translate }}</mat-label>
+          <input matInput formControlName="complement" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.NEIGHBORHOOD' | translate }}</mat-label>
+          <input matInput formControlName="neighborhood" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'PERSONAL_DATA.CITY' | translate }}</mat-label>
+          <input matInput formControlName="city" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-sm">
+          <mat-label>{{ 'PERSONAL_DATA.STATE' | translate }}</mat-label>
+          <input matInput formControlName="state" maxlength="2" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (isEditing()) {
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="save-btn"
+          [disabled]="form.invalid || isSaving()">
+          {{ isSaving() ? ('PERSONAL_DATA.SAVING' | translate) : ('PERSONAL_DATA.SAVE' | translate) }}
+        </button>
+      </div>
+    }
+  </form>
+</section>

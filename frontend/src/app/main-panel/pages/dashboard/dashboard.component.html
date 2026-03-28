@@ -1,11 +1,11 @@
 <div class="dashboard-root">
   <header class="dashboard-hero">
-    <h2>Bem-vindo, {{ accountData()?.name || 'Cliente' }}!</h2>
+    <h2>{{ 'DASHBOARD.WELCOME' | translate : { name: accountData()?.name || ('COMMON.CLIENT' | translate) } }}</h2>
 
     <div class="hero-cards">
       <div class="hero-card">
         <div class="hero-card-top">
-          <div class="muted">Saldo em Conta</div>
+          <div class="muted">{{ 'DASHBOARD.BALANCE' | translate }}</div>
         </div>
         <div class="big">
           @if (isBalanceVisible()) {
@@ -14,30 +14,30 @@
             R$ *****
           }
         </div>  
-        <button (click)="toogleBalance()" aria-label="Toggle balance visibility">
-          {{ isBalanceVisible() ? 'Esconder Saldo' : 'Mostrar Saldo' }}
+        <button (click)="toogleBalance()" [attr.aria-label]="'DASHBOARD.TOGGLE_BALANCE' | translate">
+          {{ isBalanceVisible() ? ('DASHBOARD.HIDE_BALANCE' | translate) : ('DASHBOARD.SHOW_BALANCE' | translate) }}
         </button>
       </div>
        
 
       <div class="hero-card muted-card">
         <div class="hero-card-top">
-          <div class="muted">Receitas</div>
-          <span class="hero-meta">(mês)</span>
+          <div class="muted">{{ 'DASHBOARD.INCOME' | translate }}</div>
+          <span class="hero-meta">({{ 'DASHBOARD.MONTH' | translate }})</span>
         </div>
         <div class="big text-success">
-          R$ {{ totalIncome | number:'1.2-2' }}
+          R$ {{ totalIncome() | number:'1.2-2' }}
           <mat-icon class="trend up" aria-hidden="true">trending_up</mat-icon>
         </div>
       </div>
 
       <div class="hero-card muted-card">
         <div class="hero-card-top">
-          <div class="muted">Despesas</div>
-          <span class="hero-meta">(mês)</span>
+          <div class="muted">{{ 'DASHBOARD.EXPENSES' | translate }}</div>
+          <span class="hero-meta">({{ 'DASHBOARD.MONTH' | translate }})</span>
         </div>
         <div class="big text-danger">
-          -R$ {{ totalExpense | number:'1.2-2' }}
+          -R$ {{ totalExpense() | number:'1.2-2' }}
           <mat-icon class="trend down" aria-hidden="true">trending_down</mat-icon>
         </div>
       </div>
@@ -46,8 +46,8 @@
 
   <section class="content card">
     <div class="content-header">
-      <h3>Últimas Transações</h3>
-      <div class="muted summary-text">Resumo das movimentações recentes</div>
+      <h3>{{ 'DASHBOARD.RECENT_TRANSACTIONS' | translate }}</h3>
+      <div class="muted summary-text">{{ 'DASHBOARD.RECENT_SUMMARY' | translate }}</div>
     </div>
 
 
@@ -55,19 +55,19 @@
     <div class="transactions-table">
       <table
         matSort
-        [matSortActive]="sortState.active"
-        [matSortDirection]="sortState.direction"
+        [matSortActive]="sortState().active"
+        [matSortDirection]="sortState().direction"
         matSortDisableClear
         (matSortChange)="onSortChange($event)">
         <thead>
           <tr>
-            <th mat-sort-header="date" sortActionDescription="Ordenar por data">Data</th>
-            <th class="col-description" mat-sort-header="description" sortActionDescription="Ordenar por descrição">Descrição</th>
-            <th mat-sort-header="amount" sortActionDescription="Ordenar por valor" >Valor</th>
+            <th mat-sort-header="date" sortActionDescription="Ordenar por data">{{ 'TRANSACTIONS.DATE' | translate }}</th>
+            <th class="col-description" mat-sort-header="description" sortActionDescription="Ordenar por descrição">{{ 'TRANSACTIONS.DESCRIPTION' | translate }}</th>
+            <th mat-sort-header="amount" sortActionDescription="Ordenar por valor" >{{ 'TRANSACTIONS.AMOUNT' | translate }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (item of sortedFilteredTransactions; track $index) {
+          @for (item of sortedFilteredTransactions(); track $index) {
             <tr>
               <td>{{ item?.date | date: 'dd/MM/yyyy' }}</td>
               <td class="col-description">{{ item.description }}</td>
@@ -84,17 +84,17 @@
     </div>
   </section>
 
-  @defer (on interaction(loadButton)) {
+  @defer (on viewport) {
     <app-credit-card-invoice></app-credit-card-invoice>
   }
   @placeholder {
-    <div #loadButton class="loading-placeholder" style="color: goldenrod; cursor: pointer;" >
-      Clique para ver a fatura do cartão de crédito
+    <div class="loading-placeholder" style="color: goldenrod;">
+      {{ 'DASHBOARD.SCROLL_INVOICE' | translate }}
     </div>
   }
   @loading (minimum 2s) {
     <div class="loading-placeholder" style="color: goldenrod;">
-      Carregando fatura do cartão de crédito...
+      {{ 'DASHBOARD.LOADING_INVOICE' | translate }}
     </div>
   }
 </div>

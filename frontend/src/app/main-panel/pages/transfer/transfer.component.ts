@@ -1,13 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AccountStateService } from '../../../core/services/account-state.service';
 import { take } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-transfer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './transfer.component.html',
   styleUrls: ['./transfer.component.css'],
 })
@@ -15,7 +18,7 @@ export class TransferComponent {
   private fb = inject(FormBuilder);
   private accountState = inject(AccountStateService);
 
-  account$ = this.accountState.account$;
+  account = toSignal(this.accountState.account$);
   destinationAccounts = ['Conta Corrente 0012', 'Conta Poupança 5021', 'Conta Empresa 7770'];
 
   form = this.fb.group({
@@ -25,12 +28,12 @@ export class TransferComponent {
   });
 
   isTransfering = signal(false);
-  error: string | null = null;
-  success = false;
+  error = signal<string | null>(null);
+  success = signal(false);
 
   submit(): void {
-    this.error = null;
-    this.success = false;
+    this.error.set(null);
+    this.success.set(false);
     this.isTransfering.set(true);
     if (this.form.invalid) return;
 
@@ -41,27 +44,27 @@ export class TransferComponent {
 
     this.accountState.account$.pipe(take(1)).subscribe((acc) => {
       if (!acc) {
-        this.error = 'Conta não carregada';
+        this.error.set('Conta não carregada');
         return;
       }
       if (isNaN(amount) || amount <= 0) {
-        this.error = 'Valor inválido';
+        this.error.set('Valor inválido');
         return;
       }
 
       if (acc.balance < amount) {
-        this.error = 'Saldo insuficiente';
+        this.error.set('Saldo insuficiente');
         return;
       }
 
       this.accountState.transfer(destinationAccount, amount, description)
         .subscribe({
           next: () => {
-            this.success = true;
+            this.success.set(true);
             this.form.reset();
           },
           error: (err) => {
-            this.error = err?.message || 'Erro ao realizar transferência';
+            this.error.set(err?.message || 'Erro ao realizar transferência');
           },
           complete: () => {
             this.isTransfering.set(false);

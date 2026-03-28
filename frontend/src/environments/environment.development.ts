@@ -3,3 +3,4 @@ export const environment = {
     defaultLang: 'pt-br',
     apiUrl: 'http://localhost:3000'
 };
+    

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-credit-card-invoice',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './credit-card-invoice.component.html',
-  styleUrl: './credit-card-invoice.component.css'
+  styleUrls: ['./credit-card-invoice.component.css']
 })
 export class CreditCardInvoiceComponent {
 

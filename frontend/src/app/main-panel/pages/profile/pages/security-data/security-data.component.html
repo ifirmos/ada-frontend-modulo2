@@ -1,1 +1,153 @@
-<p>security-data works!</p>
+<section class="security-root">
+
+  <!-- Password section -->
+  <div class="sec-card">
+    <div class="sec-card-header">
+      <div>
+        <h3>{{ 'SECURITY.PASSWORD_TITLE' | translate }}</h3>
+        <p class="muted">{{ 'SECURITY.PASSWORD_SUBTITLE' | translate }}</p>
+      </div>
+      <button
+        type="button"
+        class="edit-btn"
+        [class.cancel]="showPasswordForm()"
+        (click)="togglePasswordForm()">
+        {{ showPasswordForm() ? ('PERSONAL_DATA.CANCEL' | translate) : ('SECURITY.CHANGE_PASSWORD' | translate) }}
+      </button>
+    </div>
+
+    @if (passwordSuccess()) {
+      <div class="success-banner">
+        ✔ {{ 'SECURITY.PASSWORD_CHANGED' | translate }}
+      </div>
+    }
+
+    @if (showPasswordForm()) {
+      <form [formGroup]="passwordForm" (ngSubmit)="onSavePassword()" class="password-form">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'SECURITY.CURRENT_PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="currentPassword" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'SECURITY.NEW_PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="newPassword" />
+          @if (passwordForm.controls.newPassword.value) {
+            <mat-hint>
+              <span class="strength-bar">
+                <span class="bar" [class]="passwordStrengthLevel"></span>
+              </span>
+              {{ 'SECURITY.STRENGTH_' + passwordStrengthLevel.toUpperCase() | translate }}
+            </mat-hint>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>{{ 'SECURITY.CONFIRM_PASSWORD' | translate }}</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          @if (passwordForm.errors?.['mismatch'] && passwordForm.controls.confirmPassword.touched) {
+            <mat-error>{{ 'SECURITY.ERROR_MISMATCH' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (passwordError()) {
+          <div class="error-banner">{{ passwordError()! | translate }}</div>
+        }
+
+        <div class="password-rules">
+          <p class="muted">{{ 'SECURITY.PASSWORD_RULES' | translate }}</p>
+          <ul class="muted">
+            <li>{{ 'SECURITY.RULE_MIN_CHARS' | translate }}</li>
+            <li>{{ 'SECURITY.RULE_UPPER_LOWER' | translate }}</li>
+            <li>{{ 'SECURITY.RULE_NUMBER' | translate }}</li>
+            <li>{{ 'SECURITY.RULE_SPECIAL' | translate }}</li>
+          </ul>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="passwordForm.invalid || isSavingPassword()">
+            {{ isSavingPassword() ? ('PERSONAL_DATA.SAVING' | translate) : ('SECURITY.SAVE_PASSWORD' | translate) }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+
+  <!-- 2FA & notifications -->
+  <div class="sec-card">
+    <h3>{{ 'SECURITY.PREFERENCES_TITLE' | translate }}</h3>
+    <p class="muted sec-subtitle">{{ 'SECURITY.PREFERENCES_SUBTITLE' | translate }}</p>
+
+    <div class="toggle-row">
+      <div>
+        <span class="toggle-label">{{ 'SECURITY.TWO_FACTOR' | translate }}</span>
+        <p class="muted toggle-desc">{{ 'SECURITY.TWO_FACTOR_DESC' | translate }}</p>
+      </div>
+      <mat-slide-toggle
+        [checked]="twoFactorEnabled()"
+        (change)="onToggle2FA()"
+        color="primary">
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span class="toggle-label">{{ 'SECURITY.LOGIN_NOTIF' | translate }}</span>
+        <p class="muted toggle-desc">{{ 'SECURITY.LOGIN_NOTIF_DESC' | translate }}</p>
+      </div>
+      <mat-slide-toggle
+        [checked]="loginNotifications()"
+        (change)="onToggleLoginNotif()"
+        color="primary">
+      </mat-slide-toggle>
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <span class="toggle-label">{{ 'SECURITY.TRANSACTION_NOTIF' | translate }}</span>
+        <p class="muted toggle-desc">{{ 'SECURITY.TRANSACTION_NOTIF_DESC' | translate }}</p>
+      </div>
+      <mat-slide-toggle
+        [checked]="transactionNotifications()"
+        (change)="onToggleTransactionNotif()"
+        color="primary">
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <!-- Activity -->
+  <div class="sec-card">
+    <h3>{{ 'SECURITY.ACTIVITY_TITLE' | translate }}</h3>
+    <p class="muted sec-subtitle">{{ 'SECURITY.ACTIVITY_SUBTITLE' | translate }}</p>
+
+    <div class="activity-grid">
+      <div class="activity-item">
+        <span class="activity-icon">🕐</span>
+        <div>
+          <span class="muted">{{ 'SECURITY.LAST_ACCESS' | translate }}</span>
+          <strong>{{ lastAccess() }}</strong>
+        </div>
+      </div>
+
+      <div class="activity-item">
+        <span class="activity-icon">💻</span>
+        <div>
+          <span class="muted">{{ 'SECURITY.LAST_DEVICE' | translate }}</span>
+          <strong>{{ lastDevice() }}</strong>
+        </div>
+      </div>
+
+      <div class="activity-item">
+        <span class="activity-icon">🌐</span>
+        <div>
+          <span class="muted">{{ 'SECURITY.LAST_IP' | translate }}</span>
+          <strong>{{ lastIp() }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

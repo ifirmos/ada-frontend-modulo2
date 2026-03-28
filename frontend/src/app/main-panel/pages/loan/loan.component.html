@@ -1,33 +1,35 @@
 <section class="loan-root">
   <header>
-    <h2>Simulação de Crédito</h2>
-    <p class="muted">Simule um empréstimo e veja as condições</p>
+    <h2>{{ 'LOAN.TITLE' | translate }}</h2>
+    <p class="muted">{{ 'LOAN.SUBTITLE' | translate }}</p>
   </header>
 
   <article class="loan-hero">
-    <div class="muted-light">Limite Disponível</div>
+    <div class="muted-light">{{ 'LOAN.AVAILABLE_LIMIT' | translate }}</div>
     <div class="hero-value">{{ loanLimit() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
-    <small class="muted-light">Taxa de 1.99% ao mês</small>
+    <small class="muted-light">{{ 'LOAN.RATE_INFO' | translate }}</small>
   </article>
 
-  <button #botaoSimular>Desejo fazer uma simulação</button>
+  <button #botaoSimular>{{ 'LOAN.SIMULATE_BTN' | translate }}</button>
 
   @defer (on interaction(botaoSimular)) {
     <app-loan-simulator></app-loan-simulator>
   } @placeholder {
-    <p>Clique no botão acima para carregar o simulador.</p>
+    <p>{{ 'LOAN.SIMULATE_PLACEHOLDER' | translate }}</p>
+  } @loading (minimum 1s) {
+    <p style="color: goldenrod;">{{ 'COMMON.LOADING' | translate }}</p>
   }
 
   <form class="card loan-form" [formGroup]="form">
     <div>
-      <label class="form-label">Valor Desejado</label>
+      <label class="form-label">{{ 'LOAN.AMOUNT' | translate }}</label>
       <input type="number" formControlName="amount" placeholder="0,00" />
     </div>
 
     <div>
-      <label class="form-label">Parcelas</label>
+      <label class="form-label">{{ 'LOAN.INSTALLMENTS' | translate }}</label>
       <select formControlName="installments">
-        <option [ngValue]="null" disabled>Selecione</option>
+        <option [ngValue]="null" disabled>{{ 'LOAN.SELECT' | translate }}</option>
         @for (option of installmentOptions; track option) {
           <option [ngValue]="option">{{ option }}x</option>
         }
@@ -35,32 +37,35 @@
     </div>
 
     <div>
-      <label class="form-label">Taxa mensal (%)</label>
+      <label class="form-label">{{ 'LOAN.MONTHLY_RATE' | translate }}</label>
       <input type="number" formControlName="monthlyRate" />
     </div>
 
     <div class="actions">
-      <button class="btn-secondary" type="button" (click)="calculate()">Calcular</button>
-      <button class="btn-primary" type="button" (click)="apply()" [disabled]="loading || form.invalid">
-        {{ loading ? 'Enviando...' : 'Solicitar Empréstimo' }}
+      <button class="btn-secondary" type="button" (click)="calculate()">{{ 'LOAN.CALCULATE' | translate }}</button>
+      <button class="btn-primary" type="button" (click)="apply()" [disabled]="loading() || form.invalid">
+        {{ loading() ? ('LOAN.SENDING' | translate) : ('LOAN.APPLY' | translate) }}
       </button>
     </div>
   </form>
 
-  <article *ngIf="calculation" class="card result-card">
-    <div><strong>Parcela:</strong> {{ calculation.monthly | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
-    <div><strong>Total:</strong> {{ calculation.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
-  </article>
+  @if (calculation()) {
+    <article class="card result-card">
+      <div><strong>{{ 'LOAN.MONTHLY_PAYMENT' | translate }}:</strong> {{ calculation()!.monthly | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
+      <div><strong>{{ 'LOAN.TOTAL' | translate }}:</strong> {{ calculation()!.total | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</div>
+    </article>
+  }
 
   <article class="info-card">
-    <h4>Informações Importantes</h4>
+    <h4>{{ 'LOAN.INFO_TITLE' | translate }}</h4>
     <ul>
-      <li>Análise de crédito pode levar até 48 horas.</li>
-      <li>Taxa de juros de 1.99% ao mês.</li>
-      <li>Primeiro vencimento em 30 dias após a aprovação.</li>
-      <li>Sujeito a análise de crédito.</li>
+      <li>{{ 'LOAN.INFO_1' | translate }}</li>
+      <li>{{ 'LOAN.INFO_3' | translate }}</li>
+      <li>{{ 'LOAN.INFO_4' | translate }}</li>
     </ul>
   </article>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
 </section>

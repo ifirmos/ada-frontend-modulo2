@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ListTransactionsComponent } from './components/list-transactions/list-transactions.component';
 
 @Component({
   selector: 'app-transactions',
   imports: [ListTransactionsComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css',
 })

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumo de Melhorias — AngularBank</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f6f9; color: #333; line-height: 1.6; }
+    .container { max-width: 820px; margin: 0 auto; padding: 32px 24px; }
+    h1 { font-size: 1.75rem; color: #0d6efd; border-bottom: 3px solid #0d6efd; padding-bottom: 10px; margin-bottom: 28px; }
+    .card { background: #fff; border-radius: 10px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    .card h2 { font-size: 1.05rem; color: #1a1a1a; margin-bottom: 8px; }
+    .card h2 span.num { display: inline-block; background: #0d6efd; color: #fff; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-size: .85rem; margin-right: 8px; }
+    .card ul { padding-left: 20px; }
+    .card li { margin-bottom: 4px; font-size: .93rem; color: #444; }
+    code { background: #eef1f6; padding: 1px 6px; border-radius: 4px; font-size: .88em; color: #d6336c; }
+    strong { color: #1a1a1a; }
+    .badge { display: inline-block; background: #0d6efd; color: #fff; font-size: .7rem; padding: 1px 7px; border-radius: 4px; vertical-align: middle; margin-left: 4px; }
+    .footer { text-align: center; margin-top: 28px; padding: 16px; background: #198754; color: #fff; border-radius: 10px; font-weight: 600; font-size: .95rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Resumo de Melhorias — AngularBank</h1>
+
+  <div class="card">
+    <h2><span class="num">1</span> Signals e Computed</h2>
+    <ul>
+      <li>Variáveis de estado migradas para <code>signal()</code> e <code>computed()</code> nos componentes: <strong>loan</strong>, <strong>transfer</strong>, <strong>login</strong>, <strong>dashboard</strong>, <strong>header</strong></li>
+      <li>Exemplos: <code>errorMessage = signal('')</code>, <code>totalIncome = computed(() =&gt; ...)</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">2</span> Control Flow (@if)</h2>
+    <ul>
+      <li>Todas as 5 ocorrências de <code>*ngIf</code> substituídas por <code>@if</code> (loan, transfer, login)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">3</span> @defer (on viewport) — Fatura do Cartão</h2>
+    <ul>
+      <li>No dashboard, o componente de fatura mudou de <code>@defer (on interaction)</code> para <code>@defer (on viewport)</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">4</span> toSignal()</h2>
+    <ul>
+      <li>No transfer, <code>account$</code> (Observable + async pipe) foi convertido para <code>toSignal()</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">5</span> catchError em todas as requisições HTTP</h2>
+    <ul>
+      <li>Os 5 métodos de <code>transactions.service.ts</code> agora possuem <code>catchError</code> + <code>throwError</code></li>
+      <li>Métodos: getTransactions, getTransactionById, createTransaction, updateTransaction, deleteTransaction</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">6</span> Indicadores de Loading nos Formulários</h2>
+    <ul>
+      <li><code>create-transaction</code>: botão desabilitado durante loading, texto muda para "Salvando...", exibe erro</li>
+      <li><code>confirm-delete-dialog</code>: botão desabilitado durante loading, texto muda para "Excluindo...", exibe erro</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">7</span> Header traduzido com | translate</h2>
+    <ul>
+      <li>Todos os textos estáticos do header agora usam <code>{{ 'CHAVE' | translate }}</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">8</span> Arquivos de Tradução (4 idiomas)</h2>
+    <ul>
+      <li><strong>pt-br.json</strong> — Português do Brasil (padrão)</li>
+      <li><strong>pt-pt.json</strong> — Português de Portugal</li>
+      <li><strong>en-us.json</strong> — Inglês (EUA) <span class="badge">NOVO</span></li>
+      <li><strong>es.json</strong> — Espanhol <span class="badge">NOVO</span></li>
+      <li>Chaves: SIDEBAR (Dashboard, Transferir, Empréstimos, Transações, Perfil) e HEADER (Saudação, Tema, Sair, Idioma)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">9</span> Seletor Global de Idioma</h2>
+    <ul>
+      <li>Dropdown com bandeiras (🇧🇷🇵🇹🇺🇸🇪🇸) no header usando <code>MatMenu</code></li>
+      <li><code>switchLang()</code> atualiza <code>TranslateService</code> e o signal <code>currentLang</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">10</span> ChangeDetectionStrategy.OnPush</h2>
+    <ul>
+      <li>Aplicado em <strong>todos os 18 componentes</strong> (antes só 1 tinha)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">11</span> provideClientHydration</h2>
+    <ul>
+      <li><code>provideClientHydration(withEventReplay())</code> restaurado no <code>app.config.ts</code></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">12</span> Perfil — Dados Pessoais (novo) <span class="badge">NOVO</span></h2>
+    <ul>
+      <li>Tela completa com formulário de dados pessoais: nome, CPF (mascarado), data de nascimento, telefone (com máscara), e-mail, nome da mãe, gênero</li>
+      <li>Seção de endereço: CEP, rua, número, complemento, bairro, cidade, UF</li>
+      <li>Modo leitura/edição com toggle — CPF não-editável por segurança</li>
+      <li>Feedback visual: banner de sucesso ao salvar, loading no botão</li>
+      <li>Formulário reativo com validações (<code>Validators.required</code>, <code>Validators.email</code>, <code>Validators.minLength</code>)</li>
+      <li>Layout responsivo com grid 2 colunas → 1 coluna em mobile</li>
+      <li>Dados pré-carregados via <code>toSignal(account$)</code></li>
+      <li>100% traduzido via <code>| translate</code> (4 idiomas)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">13</span> Perfil — Segurança (novo) <span class="badge">NOVO</span></h2>
+    <ul>
+      <li><strong>Alteração de senha:</strong> formulário com senha atual, nova senha, confirmação — validação de match e de força</li>
+      <li><strong>Indicador de força:</strong> barra visual (fraca/média/forte) com cores dinâmicas (vermelho/amarelo/verde)</li>
+      <li>Validação personalizada: mínimo 8 chars, maiúsculas + minúsculas, número e caractere especial</li>
+      <li><strong>Segurança:</strong> toggles para autenticação 2FA, notificações de login e alertas de transações via <code>MatSlideToggle</code></li>
+      <li><strong>Atividade recente:</strong> último acesso, dispositivo e IP (mascarado) — simula dados reais</li>
+      <li>Todos os estados com <code>signal()</code> — <code>showPasswordForm</code>, <code>isSavingPassword</code>, <code>passwordSuccess</code>, etc.</li>
+      <li>100% traduzido via <code>| translate</code> (4 idiomas)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">14</span> Remoção da Edição de Transações <span class="badge">NOVO</span></h2>
+    <ul>
+      <li>Removida a rota <code>transacoes/editar/:id</code> do <code>app.routes.ts</code></li>
+      <li>Removido o botão de editar (ícone ✏️) da tabela de transações</li>
+      <li>Removido o método <code>onEdit()</code> e imports não utilizados (<code>Router</code>, <code>EventEmitter</code>, <code>Output</code>)</li>
+      <li>Removido <code>updateTransactionWithBalance()</code> do <code>AccountStateService</code></li>
+      <li>Componente <code>create-transaction</code> agora é exclusivamente para criação (removido <code>id</code> de edição)</li>
+      <li><strong>Justificativa:</strong> em aplicações bancárias reais, transações já efetivadas não podem ser editadas — apenas estornadas ou excluídas</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">15</span> i18n — Cobertura 100% <span class="badge">NOVO</span></h2>
+    <ul>
+      <li>Todos os textos estáticos da aplicação agora usam <code>| translate</code></li>
+      <li>Seções traduzidas: SIDEBAR, HEADER, LOGIN, DASHBOARD, TRANSACTIONS, TRANSFER, LOAN, PROFILE, PERSONAL_DATA, SECURITY, CREATE_TRANSACTION, DELETE_DIALOG, NOT_FOUND, COMMON</li>
+      <li>4 idiomas completos: 🇧🇷 pt-BR, 🇵🇹 pt-PT, 🇺🇸 en-US, 🇪🇸 es</li>
+      <li>Componentes traduzidos: login, dashboard, list-transactions, create-transaction, confirm-delete-dialog, loan, transfer, profile, personal-data, security-data, not-found</li>
+    </ul>
+  </div>
+
+  <div class="footer">✔ Build validado com sucesso — 0 erros.</div>
+</div>
+</body>
+</html>

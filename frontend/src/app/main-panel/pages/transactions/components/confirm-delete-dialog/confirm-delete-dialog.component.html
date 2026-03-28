@@ -1,9 +1,14 @@
-<h2 mat-dialog-title>Confirmar exclusão</h2>
+<h2 mat-dialog-title>{{ 'DELETE_DIALOG.TITLE' | translate }}</h2>
 <mat-dialog-content>
-    Tem certeza que deseja excluir a transação
+    {{ 'DELETE_DIALOG.MESSAGE' | translate }}
     <strong>{{ data.description }}</strong>?
+    @if (errorMessage()) {
+      <div class="error" style="color: red; margin-top: 8px;">{{ errorMessage() }}</div>
+    }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="close(false)">Cancelar</button>
-    <button mat-flat-button class="delete-btn" type="button" (click)="confirmDelete()">Excluir</button>
+    <button mat-button type="button" (click)="close(false)" [disabled]="isLoading()">{{ 'DELETE_DIALOG.CANCEL' | translate }}</button>
+    <button mat-flat-button class="delete-btn" type="button" (click)="confirmDelete()" [disabled]="isLoading()">
+      {{ isLoading() ? ('DELETE_DIALOG.DELETING' | translate) : ('DELETE_DIALOG.CONFIRM' | translate) }}
+    </button>
 </mat-dialog-actions>
