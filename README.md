@@ -17,14 +17,13 @@ Projeto desenvolvido para o curso de **Angular (Módulo 2)** da plataforma **Ada
 
 > Pré-requisitos: **Node.js 18+** e **npm 9+**
 
-### 1. Em um terminal, inicie a API
+### Basta executar o comando combinado abaixo no terminal, na raiz do projeto:
+
 ```bash
-cd ../backend && npx json-server --watch db.json --port 3000
+npm install && npm start
 ```
-#### 2. Em outro terminal, instale as dependências do frontend e inicialize
-```bash
-cd frontend && npm install && ng serve
-```
+
+Ele instala as dependências e sobe a API e o frontend simultaneamente.
 
 | Serviço  | URL |
 |----------|-----|

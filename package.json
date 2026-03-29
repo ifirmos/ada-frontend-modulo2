@@ -1,0 +1,13 @@
+{
+  "name": "angularbank",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "api": "cd backend && npx json-server --watch db.json --port 3000",
+    "frontend": "cd frontend && npm install && ng serve",
+    "start": "concurrently \"npm run api\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
