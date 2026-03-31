@@ -26,7 +26,7 @@
           <span class="hero-meta">({{ 'DASHBOARD.MONTH' | translate }})</span>
         </div>
         <div class="big text-success">
-          R$ {{ totalIncome() | number:'1.2-2' }}
+          R$ @if (!isBalanceVisible()) { ***** } @else { {{ totalIncome() | number:'1.2-2' }} }
           <mat-icon class="trend up" aria-hidden="true">trending_up</mat-icon>
         </div>
       </div>
@@ -37,7 +37,7 @@
           <span class="hero-meta">({{ 'DASHBOARD.MONTH' | translate }})</span>
         </div>
         <div class="big text-danger">
-          -R$ {{ totalExpense() | number:'1.2-2' }}
+          -R$ @if (!isBalanceVisible()) { ***** } @else { {{ totalExpense() | number:'1.2-2' }} }
           <mat-icon class="trend down" aria-hidden="true">trending_down</mat-icon>
         </div>
       </div>
@@ -75,7 +75,7 @@
                 style="text-align:right"
                 [class.text-success]="item.amount > 0"
                 [class.text-danger]="item.amount < 0">
-                {{ item.amount | number:'1.2-2' }}
+                @if (!isBalanceVisible()) { ***** } @else { {{ item.amount | number:'1.2-2' }} }
               </td>
             </tr>
           }

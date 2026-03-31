@@ -2,11 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, signal, effect, computed } 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { Transaction } from '../transactions/models/transaction.model';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { DecimalPipe } from '@angular/common';
 import { AccountStateService } from '../../../core/services/account-state.service';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,7 +38,7 @@ export class DashboardComponent {
   private readonly accountState = inject(AccountStateService);
   private readonly dashboardService = inject(DashboardService);
 
-  accountData = toSignal<Account | undefined>(this.dashboardService.getAccount(), {initialValue: undefined});
+  accountData = toSignal<Account | undefined>(this.dashboardService.getAccount(), { initialValue: undefined });
 
   transactions = toSignal(this.accountState.transactions$, { initialValue: [] as Transaction[] });
 

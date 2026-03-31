@@ -2,25 +2,28 @@
   <div class="user-greeting">{{ 'HEADER.GREETING' | translate : { name: accountName() } }} 👋</div>
 
   <div class="d-flex align-items-center user-actions">
-    <button mat-icon-button class="icon-btn lang-btn" [matMenuTriggerFor]="langMenu" [title]="'HEADER.LANGUAGE' | translate" [attr.aria-label]="'HEADER.LANGUAGE' | translate">
-      <span class="flag-icon">{{ currentFlag }}</span>
+    <button mat-icon-button class="icon-btn lang-btn" [matMenuTriggerFor]="langMenu"
+      [title]="'HEADER.LANGUAGE' | translate" [attr.aria-label]="'HEADER.LANGUAGE' | translate">
+      <img class="flag-icon" [src]="'https://flagcdn.com/20x15/' + currentFlag + '.png'" [alt]="currentLang()" width="20" height="15">
     </button>
     <mat-menu #langMenu="matMenu">
       @for (lang of languages; track lang.code) {
-        <button mat-menu-item (click)="switchLang(lang.code)" [class.active-lang]="lang.code === currentLang()">
-          <span class="flag-icon">{{ lang.flag }}</span>
-          <span>{{ lang.label }}</span>
-        </button>
+      <button mat-menu-item (click)="switchLang(lang.code)" [class.active-lang]="lang.code === currentLang()">
+        <img class="flag-icon" [src]="'https://flagcdn.com/20x15/' + lang.flag + '.png'" [alt]="lang.label" width="20" height="15">
+        <span>{{ lang.label }}</span>
+      </button>
       }
     </mat-menu>
 
-    <button mat-icon-button class="icon-btn" [title]="'HEADER.TOGGLE_THEME' | translate" [attr.aria-label]="'HEADER.TOGGLE_THEME' | translate" (click)="toggleTheme()">
+    <button mat-icon-button class="icon-btn" [title]="'HEADER.TOGGLE_THEME' | translate"
+      [attr.aria-label]="'HEADER.TOGGLE_THEME' | translate" (click)="toggleTheme()">
       <mat-icon>{{ isLight() ? 'light_mode' : 'dark_mode' }}</mat-icon>
     </button>
     @if (authService.isAuthenticated()) {
-      <button mat-icon-button class="icon-btn" [title]="'HEADER.LOGOUT' | translate" [attr.aria-label]="'HEADER.LOGOUT' | translate" (click)="logout()">
-        <mat-icon fontIcon="logout"></mat-icon>
-      </button>
+    <button mat-icon-button class="icon-btn" [title]="'HEADER.LOGOUT' | translate"
+      [attr.aria-label]="'HEADER.LOGOUT' | translate" (click)="logout()">
+      <mat-icon fontIcon="logout"></mat-icon>
+    </button>
     }
   </div>
 </header>

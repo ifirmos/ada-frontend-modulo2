@@ -32,16 +32,16 @@ export class HeaderComponent {
   isLight = signal(false);
 
   languages: LangOption[] = [
-    { code: 'pt-br', label: 'Português (BR)', flag: '🇧🇷' },
-    { code: 'pt-pt', label: 'Português (PT)', flag: '🇵🇹' },
-    { code: 'en-us', label: 'English (US)', flag: '🇺🇸' },
-    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'pt-br', label: 'Português (BR)', flag: 'br' },
+    { code: 'pt-pt', label: 'Português (PT)', flag: 'pt' },
+    { code: 'en-us', label: 'English (US)', flag: 'us' },
+    { code: 'es', label: 'Español', flag: 'es' },
   ];
 
   currentLang = signal(this.translate.currentLang || 'pt-br');
 
   get currentFlag(): string {
-    return this.languages.find(l => l.code === this.currentLang())?.flag || '🇧🇷';
+    return this.languages.find(l => l.code === this.currentLang())?.flag || 'br';
   }
 
   constructor() {
