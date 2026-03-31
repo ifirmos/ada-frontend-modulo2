@@ -38,7 +38,7 @@ export class HeaderComponent {
     { code: 'es', label: 'Español', flag: 'es' },
   ];
 
-  currentLang = signal(this.translate.currentLang || 'pt-br');
+  currentLang = signal(this.translate.getCurrentLang() || 'pt-br');
 
   get currentFlag(): string {
     return this.languages.find(l => l.code === this.currentLang())?.flag || 'br';
@@ -51,6 +51,7 @@ export class HeaderComponent {
         this.isLight.set(stored === 'light');
       } catch (e) {
         this.isLight.set(false);
+        console.warn('Could not access localStorage to get theme preference:', e);
       }
       this.applyTheme();
     }
@@ -66,7 +67,7 @@ export class HeaderComponent {
     if (isPlatformBrowser(this.platformId)) {
       try {
         localStorage.setItem('theme', this.isLight() ? 'light' : 'dark');
-      } catch (e) {}
+      } catch (e) { console.warn('Could not access localStorage to save theme preference:', e); }
       this.applyTheme();
     }
   }

@@ -14,7 +14,7 @@
             R$ *****
           }
         </div>  
-        <button (click)="toogleBalance()" [attr.aria-label]="'DASHBOARD.TOGGLE_BALANCE' | translate">
+        <button class="btn-primary" (click)="toogleBalance()" [attr.aria-label]="'DASHBOARD.TOGGLE_BALANCE' | translate">
           {{ isBalanceVisible() ? ('DASHBOARD.HIDE_BALANCE' | translate) : ('DASHBOARD.SHOW_BALANCE' | translate) }}
         </button>
       </div>

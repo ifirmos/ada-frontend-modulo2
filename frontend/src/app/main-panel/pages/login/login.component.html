@@ -8,7 +8,7 @@
         <label for="password">{{ 'LOGIN.PASSWORD' | translate }}:</label>
         <input type="password" id="password" [ngModel]="password()" (ngModelChange)="password.set($event)" name="password" required />
     </div>
-    <button type="submit">{{ 'LOGIN.SUBMIT' | translate }}</button>
+    <button class="btn-primary" type="submit">{{ 'LOGIN.SUBMIT' | translate }}</button>
     @if (errorMessage()) {
       <p>{{ errorMessage() }}</p>
     }
